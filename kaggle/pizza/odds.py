@@ -17,6 +17,7 @@ number_of_top_words = 200 # words with highest counts
 df_train = pd.read_json(loc_train)
 
 feature_col = 'request_text'
+feature_col = 'request_title'
 result_col = 'requester_received_pizza'
 get_columns = [feature_col,result_col]
 feature_cols = [col for col in df_train.columns if col in get_columns]
@@ -28,7 +29,7 @@ failed_words = {}
 
 for i in features.iterrows():
 	feature_info = i[1]
-	request_text = feature_info['request_text']
+	request_text = feature_info['request_title']
 	result = feature_info['requester_received_pizza']
 	if result :   # got pizza!
         	for word in request_text.strip().split():

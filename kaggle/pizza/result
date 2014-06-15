@@ -1,16 +1,8 @@
 Input shape:  (4040, 32)
 New Features shape: (4040, 14)
-DF columns: Index([u'giver_username_if_known', u'number_of_downvotes_of_request_at_retrieval', u'number_of_upvotes_of_request_at_retrieval', u'post_was_edited', u'request_id', u'request_number_of_comments_at_retrieval', u'request_text', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_account_age_in_days_at_retrieval', u'requester_days_since_first_post_on_raop_at_request', u'requester_days_since_first_post_on_raop_at_retrieval', u'requester_number_of_comments_at_request', u'requester_number_of_comments_at_retrieval', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_comments_in_raop_at_retrieval', u'requester_number_of_posts_at_request', u'requester_number_of_posts_at_retrieval', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_posts_on_raop_at_retrieval', u'requester_number_of_subreddits_at_request', u'requester_received_pizza', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_minus_downvotes_at_retrieval', u'requester_upvotes_plus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_retrieval', u'requester_user_flair', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc'], dtype='object')
-NF columns: Index([u'rice', u'person', u'edit', u'paycheck', u'went', u'request', u'wife', u'currently', u'start', u'offer', u'check', u'recently', u'total_top_words'], dtype='object')
-SHAPE RES:  (4040, 45)
-RES COLUMNs: Index([u'giver_username_if_known', u'number_of_downvotes_of_request_at_retrieval', u'number_of_upvotes_of_request_at_retrieval', u'post_was_edited', u'request_id', u'request_number_of_comments_at_retrieval', u'request_text', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_account_age_in_days_at_retrieval', u'requester_days_since_first_post_on_raop_at_request', u'requester_days_since_first_post_on_raop_at_retrieval', u'requester_number_of_comments_at_request', u'requester_number_of_comments_at_retrieval', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_comments_in_raop_at_retrieval', u'requester_number_of_posts_at_request', u'requester_number_of_posts_at_retrieval', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_posts_on_raop_at_retrieval', u'requester_number_of_subreddits_at_request', u'requester_received_pizza', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_minus_downvotes_at_retrieval', u'requester_upvotes_plus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_retrieval', u'requester_user_flair', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc', u'rice', u'person', u'edit', u'paycheck', u'went', u'request', u'wife', u'currently', u'start', u'offer', u'check', u'recently', u'total_top_words'], dtype='object')
 DFTC1 before FE: Index([u'giver_username_if_known', u'request_id', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_days_since_first_post_on_raop_at_request', u'requester_number_of_comments_at_request', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_posts_at_request', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_subreddits_at_request', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_request', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc'], dtype='object')
 Input shape:  (1631, 17)
 New Features shape: (1631, 14)
-DF columns: Index([u'giver_username_if_known', u'request_id', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_days_since_first_post_on_raop_at_request', u'requester_number_of_comments_at_request', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_posts_at_request', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_subreddits_at_request', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_request', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc'], dtype='object')
-NF columns: Index([u'rice', u'person', u'edit', u'paycheck', u'went', u'request', u'wife', u'currently', u'start', u'offer', u'check', u'recently', u'total_top_words'], dtype='object')
-SHAPE RES:  (1631, 30)
-RES COLUMNs: Index([u'giver_username_if_known', u'request_id', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_days_since_first_post_on_raop_at_request', u'requester_number_of_comments_at_request', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_posts_at_request', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_subreddits_at_request', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_request', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc', u'rice', u'person', u'edit', u'paycheck', u'went', u'request', u'wife', u'currently', u'start', u'offer', u'check', u'recently', u'total_top_words'], dtype='object')
 DFTC2 after FE: Index([u'giver_username_if_known', u'request_id', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_days_since_first_post_on_raop_at_request', u'requester_number_of_comments_at_request', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_posts_at_request', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_subreddits_at_request', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_request', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc', u'rice', u'person', u'edit', u'paycheck', u'went', u'request', u'wife', u'currently', u'start', u'offer', u'check', u'recently', u'total_top_words'], dtype='object')
 Checking if columns match...
 feature_cols: 20 [u'number_of_downvotes_of_request_at_retrieval', u'number_of_upvotes_of_request_at_retrieval', u'request_number_of_comments_at_retrieval', u'requester_account_age_in_days_at_request', u'requester_account_age_in_days_at_retrieval', u'requester_days_since_first_post_on_raop_at_request', u'requester_days_since_first_post_on_raop_at_retrieval', u'requester_number_of_comments_at_request', u'requester_number_of_comments_at_retrieval', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_comments_in_raop_at_retrieval', u'requester_number_of_posts_at_request', u'requester_number_of_posts_at_retrieval', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_posts_on_raop_at_retrieval', u'requester_number_of_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_minus_downvotes_at_retrieval', u'requester_upvotes_plus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_retrieval']
@@ -32,63 +24,31 @@ DFT3 Index([u'giver_username_if_known', u'request_id', u'request_text_edit_aware
 X_train shape:  (4040, 22)
 X_test shape:  (1631, 22)
 Index([u'giver_username_if_known', u'request_id', u'request_text_edit_aware', u'request_title', u'requester_account_age_in_days_at_request', u'requester_days_since_first_post_on_raop_at_request', u'requester_number_of_comments_at_request', u'requester_number_of_comments_in_raop_at_request', u'requester_number_of_posts_at_request', u'requester_number_of_posts_on_raop_at_request', u'requester_number_of_subreddits_at_request', u'requester_subreddits_at_request', u'requester_upvotes_minus_downvotes_at_request', u'requester_upvotes_plus_downvotes_at_request', u'requester_username', u'unix_timestamp_of_request', u'unix_timestamp_of_request_utc', u'rice', u'person', u'edit', u'paycheck', u'went', u'request', u'wife', u'currently', u'start', u'offer', u'check', u'recently', u'total_top_words'], dtype='object')
-TEST IDS: 0      t3_i8iy4
-1     t3_1mfqi0
-2      t3_lclka
-3     t3_1jdgdj
-4      t3_t2qt4
-5      t3_pvojb
-6     t3_142n4c
-7     t3_17rja6
-8     t3_1lg6u2
-9     t3_1b0mtx
-10     t3_mmivq
-11    t3_11ux2a
-12     t3_klige
-13    t3_1iv3cj
-14    t3_13dh0w
-...
-1616    t3_10cy64
-1617     t3_m7m7l
-1618    t3_1lfrlc
-1619     t3_iihye
-1620     t3_xn5hp
-1621     t3_ro9ud
-1622     t3_kx1pn
-1623    t3_1cn0h3
-1624     t3_zq12j
-1625    t3_1br2hm
-1626     t3_knttk
-1627    t3_11wza2
-1628     t3_iwbsf
-1629     t3_nys7g
-1630    t3_17pmtu
-Name: request_id, Length: 1631, dtype: object
 Shape of test_ids:  (1631,)
 num_features:  45 , n_estimators:  9
  Now fitting ...
  Done fitting!
 Feature Importances:
-Feature:  requester_account_age_in_days_at_request , Importance:  0.1404
-Feature:  requester_days_since_first_post_on_raop_at_request , Importance:  0.1404
-Feature:  requester_number_of_comments_at_request , Importance:  0.1404
-Feature:  requester_number_of_comments_in_raop_at_request , Importance:  0.1404
-Feature:  requester_number_of_posts_at_request , Importance:  0.1404
-Feature:  requester_number_of_posts_on_raop_at_request , Importance:  0.1404
-Feature:  requester_number_of_subreddits_at_request , Importance:  0.1404
-Feature:  requester_upvotes_minus_downvotes_at_request , Importance:  0.1404
-Feature:  requester_upvotes_plus_downvotes_at_request , Importance:  0.1404
-Feature:  rice , Importance:  0.1404
-Feature:  person , Importance:  0.1404
-Feature:  edit , Importance:  0.1404
-Feature:  paycheck , Importance:  0.1404
-Feature:  went , Importance:  0.1404
-Feature:  request , Importance:  0.1404
-Feature:  wife , Importance:  0.1404
-Feature:  currently , Importance:  0.1404
-Feature:  start , Importance:  0.1404
-Feature:  offer , Importance:  0.1404
-Feature:  check , Importance:  0.1404
-Feature:  recently , Importance:  0.1404
-Feature:  total_top_words , Importance:  0.1404
+Feature:  requester_account_age_in_days_at_request , Importance:  0.1284
+Feature:  requester_days_since_first_post_on_raop_at_request , Importance:  0.0398
+Feature:  requester_number_of_comments_at_request , Importance:  0.1297
+Feature:  requester_number_of_comments_in_raop_at_request , Importance:  0.0438
+Feature:  requester_number_of_posts_at_request , Importance:  0.123
+Feature:  requester_number_of_posts_on_raop_at_request , Importance:  0.0213
+Feature:  requester_number_of_subreddits_at_request , Importance:  0.1225
+Feature:  requester_upvotes_minus_downvotes_at_request , Importance:  0.1279
+Feature:  requester_upvotes_plus_downvotes_at_request , Importance:  0.1295
+Feature:  rice , Importance:  0.0084
+Feature:  person , Importance:  0.0082
+Feature:  edit , Importance:  0.0093
+Feature:  paycheck , Importance:  0.0092
+Feature:  went , Importance:  0.006
+Feature:  request , Importance:  0.0088
+Feature:  wife , Importance:  0.007
+Feature:  currently , Importance:  0.0059
+Feature:  start , Importance:  0.0074
+Feature:  offer , Importance:  0.0069
+Feature:  check , Importance:  0.0091
+Feature:  recently , Importance:  0.008
+Feature:  total_top_words , Importance:  0.04
 Done!

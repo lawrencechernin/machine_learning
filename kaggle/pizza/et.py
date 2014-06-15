@@ -12,6 +12,11 @@ row_id_name = 'request_id' # row id, will be used in producing the prediction/ou
 do_not_process_columns = [row_id_name,'giver_username_if_known','request_text','request_text_edit_aware','requester_username','request_title','post_was_edited','requester_subreddits_at_request','requester_user_flair','unix_timestamp_of_request','unix_timestamp_of_request_utc']
 skip_columns = [label_name] + do_not_process_columns
 
+# found by odds_ratio
+top_text_words = ['rice','person','edit','paycheck','went','request','wife','currently','start','offer','check','recently'] # in receiving pizza
+top_title_words = ['cooking','anniversary','asking','ask','christmas','happy','baby','father','arizona','daughter','kentucky','yesterday','laid','late'] # in title of receiving pizza
+
+
 
 if __name__ == "__main__":
   loc_train = "data/train.json"
@@ -26,9 +31,12 @@ if __name__ == "__main__":
 
   feature_cols = [col for col in df_train.columns if col not in skip_columns]
   test_cols = [col for col in df_test.columns if col not in do_not_process_columns]
-  df_train = utils.feature_engineer_request_text(df_train)  # do some feature engineering
+  df_train = utils.feature_engineer_text(df_train,top_text_words,'request_text_edit_aware')  # do some feature engineering with request_text_edit_aware
+  df_train = utils.feature_engineer_text(df_train,top_title_words,'request_title')  # do some feature engineering with request_title. appends new feature
   print "DFTC1 before FE:", df_test.columns
-  df_test = utils.feature_engineer_request_text(df_test)  # do some feature engineering
+
+  df_test = utils.feature_engineer_text(df_test,top_text_words,'request_text_edit_aware')  # do some feature engineering with request_text_edit_aware
+  df_test = utils.feature_engineer_text(df_test,top_title_words,'request_title')  # do some feature engineering with request_title
   print "DFTC2 after FE:", df_test.columns
 
   print "Checking if columns match..."
@@ -64,7 +72,7 @@ if __name__ == "__main__":
   y = df_train[label_name]
   test_ids = df_test[row_id_name]
   print df_test.columns
-  print "TEST IDS:", test_ids
+  #print "TEST IDS:", test_ids
   print "Shape of test_ids: ", test_ids.shape
   #print "Y:"
   #print y
@@ -76,7 +84,7 @@ if __name__ == "__main__":
   num_features = len(df_train.columns)
   
   n_estimators = int(math.sqrt(num_features))
-  n_estimators = 9
+  n_estimators = 6
   print "num_features: ", num_features,", n_estimators: ",n_estimators
   
   clf = ensemble.ExtraTreesClassifier(n_estimators = n_estimators, n_jobs = -1)
@@ -91,6 +99,7 @@ if __name__ == "__main__":
   for feature in feature_cols:
         importance = round(clf.feature_importances_[index_of_feature],4)
         print "Feature: ", feature, ", Importance: ", importance
+	index_of_feature += 1
 
   with open(loc_submission, "wb") as outfile:
     outfile.write(row_id_name + "," + label_name + "\n")

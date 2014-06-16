@@ -35,7 +35,8 @@
 import pandas as pd
 from string import punctuation
 import numpy as np
-import sys
+import sys,time,re
+from datetime import datetime
 
 def feature_engineer_text(df,top_words,raw_feature_column):
 	total_name = 'total_top_words' + '_' + raw_feature_column
@@ -99,6 +100,77 @@ def feature_engineer_text(df,top_words,raw_feature_column):
 	#print y[found_row,...]
 	# finally concatonate new_features in df and return
 
+	return res
 
+# put date into hour or day,day of week, month of year
+def feature_engineer_date(df):
+	date_columns = ['hour','day','week','month'] # new feature columns
+	print "Input shape: ", df.shape
+	df_shape = df.shape
+	x = df_shape[0]
+	#new_features = np.zeros((x,column_max+1)) # will populate with 1's for hits
+	new_features = pd.DataFrame(index=range(x),columns=date_columns)
+	new_features.fillna(0,inplace=1) # fill with zeros
+	print "New Features shape:", new_features.shape
+	#print new_features
+	feature_col = 'unix_timestamp_of_request_utc'
+	get_columns = ['request_id',feature_col]  # request_id used for joining
+	feature_cols = [col for col in df.columns if col in get_columns]
+	features = df[feature_cols]
+
+
+	row_number = 0
+	for i in features.iterrows():
+        	feature_info = i[1]
+                request_id = feature_info['request_id']
+                new_features.loc[row_number,'request_id'] = request_id
+        	date_utc = feature_info[feature_col]
+		z = datetime.utcfromtimestamp(date_utc)
+		woy0 = z.strftime('%V')
+		dow0 = z.strftime('%w')
+		hod0 = z.strftime('%H')
+		moy0 = z.strftime('%m')
+
+		woy = re.sub("^0+","",woy0)
+		moy = re.sub("^0+","",moy0)
+		hod = re.sub("^0+","",hod0)
+		dow = re.sub("^0+","",dow0)
+		if dow == '' :
+			dow = 0
+		if hod == '' :
+			hod = 0
+		if moy == '' :
+			moy = 0
+		if woy == '' :
+			woy = 0
+
+
+        	request_id = feature_info['request_id']
+		new_features.loc[row_number,'request_id'] = request_id
+		# now create additional features based on this
+		hour = hod
+		day = dow
+		week = woy
+		month =  moy
+		new_features.loc[row_number,'hour'] = int(hour)
+		new_features.loc[row_number,'day'] = int(day)
+		new_features.loc[row_number,'week'] = int(week)
+		new_features.loc[row_number,'month'] = int(month)
+		new_features.loc[row_number,'row_number'] = row_number
+
+		#print hour,day,week,month,date_utc
+		#sys.exit()
+
+		row_number += 1
+
+	#print "DF columns:", df.columns
+	new_features = new_features.drop('row_number',1)  # dont keep this column anymore
+	new_features = new_features.drop('request_id',1)  # dont keep this column anymore
+	df = df.drop('unix_timestamp_of_request_utc',1)  # dont keep this column anymore
+	#print "NF columns:", new_features.columns
+	#res = pd.concat((df,new_features),join_axes='request_id')
+	res = pd.concat((df,new_features),1)
+	#print "SHAPE RES: ",res.shape
+        #print "RES COLUMNs:", res.columns
 
 	return res

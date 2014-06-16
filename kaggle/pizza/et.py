@@ -9,7 +9,7 @@ row_id_name = 'request_id' # row id, will be used in producing the prediction/ou
 
 ###############################################################
 
-do_not_process_columns = [row_id_name,'giver_username_if_known','request_text','request_text_edit_aware','requester_username','request_title','post_was_edited','requester_subreddits_at_request','requester_user_flair','unix_timestamp_of_request','unix_timestamp_of_request_utc']
+do_not_process_columns = [row_id_name,'giver_username_if_known','request_text','request_text_edit_aware','requester_username','request_title','post_was_edited','requester_subreddits_at_request','requester_user_flair','unix_timestamp_of_request']
 skip_columns = [label_name] + do_not_process_columns
 
 # found by odds_ratio
@@ -33,10 +33,12 @@ if __name__ == "__main__":
   test_cols = [col for col in df_test.columns if col not in do_not_process_columns]
   df_train = utils.feature_engineer_text(df_train,top_text_words,'request_text_edit_aware')  # do some feature engineering with request_text_edit_aware
   df_train = utils.feature_engineer_text(df_train,top_title_words,'request_title')  # do some feature engineering with request_title. appends new feature
+  df_train = utils.feature_engineer_date(df_train) # put time of day,week,month,year into features
   print "DFTC1 before FE:", df_test.columns
 
   df_test = utils.feature_engineer_text(df_test,top_text_words,'request_text_edit_aware')  # do some feature engineering with request_text_edit_aware
   df_test = utils.feature_engineer_text(df_test,top_title_words,'request_title')  # do some feature engineering with request_title
+  df_test = utils.feature_engineer_date(df_test) # put time of day,week,month,year into features
   print "DFTC2 after FE:", df_test.columns
 
   print "Checking if columns match..."
@@ -84,7 +86,7 @@ if __name__ == "__main__":
   num_features = len(df_train.columns)
   
   n_estimators = int(math.sqrt(num_features))
-  n_estimators = 6
+  n_estimators = 8
   print "num_features: ", num_features,", n_estimators: ",n_estimators
   
   clf = ensemble.ExtraTreesClassifier(n_estimators = n_estimators, n_jobs = -1)
@@ -104,7 +106,11 @@ if __name__ == "__main__":
   with open(loc_submission, "wb") as outfile:
     outfile.write(row_id_name + "," + label_name + "\n")
     for e, val in enumerate(list(clf.predict(X_test))):
-      outfile.write("%s,%s\n"%(test_ids[e],val))
+      if val :
+	val_0_1 = 1
+      else :
+        val_0_1 = 0
+      outfile.write("%s,%s\n"%(test_ids[e],val_0_1))
 
   print "Done!"
 

@@ -1,3 +1,5 @@
+dev_mode=True # use this to run on subset of training while developing this script
+
 import numpy as np 
 import pandas as pd 
 from collections import Counter
@@ -10,6 +12,21 @@ from sklearn import naive_bayes
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
+
+def smape_fast(y_true, y_pred):
+       y_true=pd.DataFrame(y_true)
+       y_pred=pd.DataFrame(y_pred)
+       assert y_true.shape[1]==1
+       assert y_pred.shape[1]==1
+       df=pd.concat([y_true, y_pred], axis=1)
+       df.columns=['true', 'pred']
+       df['sum']=df['true']+df['pred']
+       df['diff']=df['true']-df['pred']
+       df['diff']=pd.DataFrame.abs(df['diff'])
+       df['smape_base']=df['diff']/df['sum']
+       out=df['smape_base'].sum()
+       out*= (200/y_true.shape[0])
+       return out
 
 def get_lang_from_page(page): 
     lang = 'ts' # just throw into this bucket since later in the script it tries to reprocess these cases which arise from bogus splitting.
@@ -126,18 +143,8 @@ print(metrics.classification_report(orig_target,result_on_training))
 del train['language']
 
 melt_columns=49  # 49 gives best result compared with 48,50 and other combos
-melt_columns_latest=6
-melt_columns_penulatimate=20
-train_copy = train
 train = pd.melt(train[list(train.columns[-melt_columns:])+['Page']], id_vars='Page', var_name='date', value_name='Visits')
-train_latest = pd.melt(train_copy[list(train_copy.columns[-melt_columns_latest:])+['Page']], id_vars='Page', var_name='date', value_name='Visits_latest')
-train_penultimate = pd.melt(train_copy[list(train_copy.columns[-melt_columns_penulatimate:])+['Page']], id_vars='Page', var_name='date', value_name='Visits_penulatimate')
 print("TH:", train.head())
-print("TH_L_latest:", train_latest.head()) # I will join these fields (Visits_latest, Visits_penulatimate) into the main "train" dataframe
-train_new = train.merge(train_latest,how='left')
-train_new2 = train_new.merge(train_penultimate,how='left')
-print("TNEW:", train_new2.head())
-#train = train_new2
 
 train['date'] = train['date'].astype('datetime64[ns]')
 train['weekend'] = ((train.date.dt.dayofweek) >=5).astype(float)
@@ -200,6 +207,7 @@ test_zh=['2017-01-02', '2017-02-27', '2017-02-28', '2017-03-01']
 train_o_zh=['2015-10-10','2016-02-06', '2016-02-14', '2016-06-12', '2016-09-18', '2016-10-08', '2016-10-09']
 test_o_zh=['2017-01-22', '2017-02-04']
 
+
 train.loc[(train.language=='en')&(train.date.isin(train_us+train_uk)), 'holiday']=1
 train.loc[(train.language=='de')&(train.date.isin(train_de)), 'holiday']=1
 train.loc[(train.language=='fr')&(train.date.isin(train_fr)), 'holiday']=1
@@ -208,6 +216,7 @@ train.loc[(train.language=='es')&(train.date.isin(train_es)), 'holiday']=1
 train.loc[(train.language=='ja')&(train.date.isin(train_ja)), 'holiday']=1
 train.loc[(train.language=='zh')&(train.date.isin(train_zh)), 'holiday']=1
 train.loc[(train.language=='zh')&(train.date.isin(train_o_zh)), 'holiday']=0
+train.loc[train.holiday.isnull(), 'holiday'] = 0
 
 #same with test
 test = pd.read_csv("../input/key_1.csv")
@@ -239,32 +248,71 @@ test.loc[(test.language=='es')&(test.date.isin(test_es)), 'holiday']=1
 test.loc[(test.language=='ja')&(test.date.isin(test_ja)), 'holiday']=1
 test.loc[(test.language=='zh')&(test.date.isin(test_zh)), 'holiday']=1
 test.loc[(test.language=='zh')&(test.date.isin(test_o_zh)), 'holiday']=0
+test.loc[test.holiday.isnull(), 'holiday'] = 0
 
 print("SAVING FILES:")
 train.to_csv('train.csv')
 test.to_csv('test.csv')
+train.loc[train.Visits.isnull(), 'Visits'] = 0
+train_last_entry=train[train.date=='2016-12-31'] #lets take max day
+print("TRAIN RESULT:", train_last_entry)
 print(train.head())
 print(train)
-train_page_per_dow = train.groupby(['Page','weekend','holiday']).median().reset_index()
+train_page_per_dow = train.groupby(['Page','weekend','holiday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday','language']).median().reset_index()
+print("TPPDOW shape:", train_page_per_dow.shape)
+print("TPPDOW:", train_page_per_dow.head())
+print("TLE shape:", train_last_entry.shape())
+print("TLE:", train_last_entry.head())
+# call fast_smape on train_page_per_dow vs train_last_entry
+#WE need to align the rows of train_page_per_dow and train_last_entry GP
+res = smape_fast(train_page_per_dow['Visits'],train_last_entry['Visits']) # presuming the dates are aligned???
+print("FAST SMAPE:", res) #GP need to see if SMAPE score is useful to predict the Kaggle public LB score, and alteast moves in the same direction and 1:1
+
 test = test.merge(train_page_per_dow, how='left')
 
 test.loc[test.Visits.isnull(), 'Visits'] = 0
 test['Visits']=(test['Visits']*10).astype('int')/10
-test[['Id','Visits']].to_csv('groupedBy.csv', index=False)
+test[['Id','Visits']].to_csv('groupedBy.csv', index=False) ### current result gives SMAPE of 52.1, why did it get worse than before with more features? #GP
+# GP flatten out the extra features before running the median operation on line 259, and see if you can recover the previous best score of 44.9
 
-### ADD 5 FOLD CV HERE
-n_folds = 5
-n_samples = X.shape[0]
-print( X.shape)
-print( "n_samples:", n_samples)
-kf = cross_validation.KFold(n_samples,n_folds)
-for train_index, test_index in kf:
-        X_train, X_test = X[train_index], X[test_index]   # X is all the columns except for the Visits (prediction)
-        y_train, y_test = y[train_index], y[test_index]   # the field were trying to predict
 
-        # insert model here.  Put model code into one function so we can call it here in one shot, and we also call it again on the whole data set to make the submission
+##### NOW TRY THIS APPROACH BUT REPLACE median with fibonnaci window function GP on line 259
 
-        # compute SMAPE score per fold... how do each fold compare, any outiers, if so what can we do... hows does average of the SMAPE compare to Kaggle public LB score
+######################## NOW RUN XGBOOST ###############################
+### we need to added moving average time features here.... GP
+sys.exit()
+import xgboost
+train.loc[:, 'Visits'] = train.Visits.fillna(0)
 
-# Now we will try an XGBOOST Model with the features of: holiday,weekend,language,visits,visits_latest,visits_penulatimate
-# TBD
+X_test = data.loc[data.eval_set == "test",:] # TBD pick a subset of the training to use for testing, say 10%
+TBD remove the testing cases from train dataframe
+
+# 
+X_train = train.drop('Visits', axis=1)
+y_train = train.Visits
+
+d_train = xgboost.DMatrix(X_train, y_train)
+xgb_params = {
+    "objective"         : "reg:linear"   # TBD check ...
+    ,"eval_metric"      : "fast_smape"   # TBD need custom smape get working in here, or as close as possible
+    ,"eta"              : 0.09
+    ,"max_depth"        : 7
+    ,"min_child_weight" : 9
+    ,"gamma"            :0.70
+    ,"subsample"        :0.76
+    ,"colsample_bytree" :0.95
+    ,"alpha"            :2e-05
+    ,"lambda"           :10
+}
+
+watchlist= [(d_train, "train")]
+model = xgboost.train(params=xgb_params, dtrain=d_train, num_boost_round=700, evals=watchlist, verbose_eval=10)
+
+predicted = model.predict(xgboost.DMatrix(test))
+ 
+#now compare predicted to actual to get SMAPE
+
+# now rerun model on full training data set so we can make Kaggle submission
+
+
+
